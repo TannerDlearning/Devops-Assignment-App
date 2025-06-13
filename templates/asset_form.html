@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ 'Edit' if asset else 'Add' }} Asset</h2>
+<form method="post">
+    <label for="name">Asset Name:</label>
+    <input id="name" name="name" placeholder="e.g. Work Laptop" title="Asset name" required
+           value="{{ asset.name if asset else '' }}">
+
+    <label for="type">Asset Type:</label>
+    <select id="type" name="type" title="Asset type" required>
+        {% for t in ['Mobile', 'TV', 'PC', 'Laptop'] %}
+            <option value="{{ t }}" {% if asset and asset.type == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="submit" value="{{ 'Update' if asset else 'Create' }}">
+</form>
+{% endblock %}

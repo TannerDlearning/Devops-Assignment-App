@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Register</h2>
+<form method="post">
+    <label for="username">Username:</label>
+    <input id="username" name="username" placeholder="Enter username" title="Username" required><br>
+
+    <label for="password">Password:</label>
+    <input id="password" name="password" type="password" placeholder="Enter password" title="Password" required><br>
+
+    <label for="role">Role:</label>
+    <select id="role" name="role" title="User role">
+        <option value="admin">Admin</option>
+        <option value="regular">Regular</option>
+    </select><br>
+
+    <input type="submit" value="Register">
+</form>
+{% endblock %}

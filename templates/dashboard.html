@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Electronic Assets</h2>
+<a class="button" href="/create">+ Add Asset</a>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Owner</th>
+        <th>Actions</th>
+    </tr>
+    {% for asset in assets %}
+    <tr>
+        <td>{{ asset.name }}</td>
+        <td>{{ asset.type }}</td>
+        <td>{{ asset.username }}</td>
+        <td>
+            {% if asset.owner_id == session.user %}
+                <a class="button" href="/edit/{{ asset.id }}">Edit</a>
+            {% endif %}
+            {% if session.role == 'admin' %}
+                <a class="button" href="/delete/{{ asset.id }}">Delete</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
