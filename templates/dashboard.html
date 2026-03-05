@@ -19,8 +19,13 @@
             {% if asset.owner_id == session.user %}
                 <a class="button" href="/edit/{{ asset.id }}">Edit</a>
             {% endif %}
+
             {% if session.role == 'admin' %}
-                <a class="button" href="/delete/{{ asset.id }}">Delete</a>
+                <form method="post" action="/delete/{{ asset.id }}" style="display:inline;"
+                      onsubmit="return confirm('Delete this asset? This cannot be undone.');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="button danger" type="submit">Delete</button>
+                </form>
             {% endif %}
         </td>
     </tr>

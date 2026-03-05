@@ -9,8 +9,11 @@
 <body>
     <nav>
         {% if session.user %}
-            Logged in as {{ session.role }} |
-            <a href="/logout">Logout</a>
+            Logged in as {{ session.role }}
+            {% if session.role == "admin" %}
+                | <a href="/admin/users">Manage Users</a>
+            {% endif %}
+            | <a href="/logout">Logout</a>
         {% else %}
             <a href="/login">Login</a>
             <a href="/register">Register</a>

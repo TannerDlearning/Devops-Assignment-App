@@ -2,17 +2,15 @@
 {% block content %}
 <h2>Register</h2>
 <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
     <label for="username">Username:</label>
     <input id="username" name="username" placeholder="Enter username" title="Username" required><br>
 
     <label for="password">Password:</label>
-    <input id="password" name="password" type="password" placeholder="Enter password" title="Password" required><br>
+    <input id="password" name="password" type="password" placeholder="At least 10 characters" title="Password" minlength="10" required><br>
 
-    <label for="role">Role:</label>
-    <select id="role" name="role" title="User role">
-        <option value="admin">Admin</option>
-        <option value="regular">Regular</option>
-    </select><br>
+    <p class="hint">New accounts are created as <strong>regular users</strong>. An admin can promote users if needed.</p>
 
     <input type="submit" value="Register">
 </form>

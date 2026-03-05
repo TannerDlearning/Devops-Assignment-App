@@ -2,6 +2,8 @@
 {% block content %}
 <h2>Login</h2>
 <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
     <label for="username">Username:</label>
     <input id="username" name="username" placeholder="Enter username" title="Username" required><br>
 
@@ -11,5 +13,5 @@
     <input type="submit" value="Login">
 </form>
 
-<p>Don't have an account? <a href="/register">Register here</a>.</p>  <!-- ✅ Added -->
+<p>Don't have an account? <a href="/register">Register here</a>.</p>
 {% endblock %}

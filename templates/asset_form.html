@@ -2,13 +2,15 @@
 {% block content %}
 <h2>{{ 'Edit' if asset else 'Add' }} Asset</h2>
 <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
     <label for="name">Asset Name:</label>
     <input id="name" name="name" placeholder="e.g. Work Laptop" title="Asset name" required
-           value="{{ asset.name if asset else '' }}">
+           maxlength="80" value="{{ asset.name if asset else '' }}">
 
     <label for="type">Asset Type:</label>
     <select id="type" name="type" title="Asset type" required>
-        {% for t in ['Mobile', 'TV', 'PC', 'Laptop'] %}
+        {% for t in allowed_types %}
             <option value="{{ t }}" {% if asset and asset.type == t %}selected{% endif %}>{{ t }}</option>
         {% endfor %}
     </select>

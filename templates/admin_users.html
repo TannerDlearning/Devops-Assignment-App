@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <h2 style="margin:0;">Manage Users</h2>
+  <a href="/" style="
+        text-decoration:none;
+        padding:8px 14px;
+        background:#4CAF50;
+        color:white;
+        border-radius:6px;
+        font-size:14px;
+        font-weight:500;
+    ">
+    ← Back to Dashboard
+  </a>
+</div>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Username</th>
+    <th>Role</th>
+    <th>Created</th>
+    <th>Change Role</th>
+  </tr>
+
+  {% for u in users %}
+  <tr>
+    <td>{{ u.id }}</td>
+    <td>{{ u.username }}</td>
+    <td>{{ u.role }}</td>
+    <td>{{ u.created_at }}</td>
+    <td>
+      <form method="post" action="/admin/users/{{ u.id }}/role" style="display:inline;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <select name="role" aria-label="Set role">
+          <option value="user" {% if u.role == 'user' %}selected{% endif %}>user</option>
+          <option value="admin" {% if u.role == 'admin' %}selected{% endif %}>admin</option>
+        </select>
+
+        <button class="button" type="submit">Save</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
