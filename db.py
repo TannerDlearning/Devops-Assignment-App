@@ -1,6 +1,13 @@
 import os
 import sqlite3
+import shutil
 from flask import current_app
+
+
+def _default_db_path() -> str:
+    if os.environ.get("VERCEL"):
+        return "/tmp/data.db"
+    return "data.db"
 
 
 def _db_path() -> str:
@@ -11,7 +18,7 @@ def _db_path() -> str:
     except RuntimeError:
         pass
 
-    return os.environ.get("DATABASE_PATH", "data.db")
+    return os.environ.get("DATABASE_PATH", _default_db_path())
 
 
 def get_connection() -> sqlite3.Connection:
@@ -26,10 +33,22 @@ def _table_columns(conn: sqlite3.Connection, table: str) -> set[str]:
     return {r[1] for r in rows}
 
 
-def init_db() -> None:
-    """Create database and apply simple migrations if needed."""
+def init_db(path: str | None = None) -> None:
+    path = path or _db_path()
+    dir_name = os.path.dirname(path)
+    if dir_name:
+        os.makedirs(dir_name, exist_ok=True)
 
-    path = os.environ.get("DATABASE_PATH", "data.db")
+    source_db = "data.db"
+
+    if (
+        os.environ.get("VERCEL")
+        and not os.path.exists(path)
+        and os.path.exists(source_db)
+        and os.path.abspath(source_db) != os.path.abspath(path)
+    ):
+        shutil.copyfile(source_db, path)
+
     first_time = not os.path.exists(path)
 
     conn = sqlite3.connect(path)

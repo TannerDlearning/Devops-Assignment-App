@@ -30,6 +30,8 @@ def create_app(test_config: dict | None = None) -> Flask:
     if test_config:
         app.config.update(test_config)
 
+    db.init_db()
+
     @app.context_processor
     def inject_csrf_token():
         return {"csrf_token": generate_csrf_token}
