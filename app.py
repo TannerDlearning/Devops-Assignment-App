@@ -58,6 +58,9 @@ def create_app(test_config: dict | None = None) -> Flask:
     return app
 
 
+app = create_app()
+
+
 if __name__ == "__main__":
     db.init_db()
-    create_app().run(debug=False)
+    app.run(debug=False)
