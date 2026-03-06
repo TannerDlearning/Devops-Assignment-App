@@ -4,12 +4,11 @@ from flask import current_app
 
 
 def _db_path() -> str:
-    """Return the SQLite database path."""
     try:
-        cfg = current_app.config  # type: ignore[attr-defined]
+        cfg = current_app.config
         if cfg.get("DATABASE"):
             return str(cfg["DATABASE"])
-    except Exception:
+    except RuntimeError:
         pass
 
     return os.environ.get("DATABASE_PATH", "data.db")
@@ -51,22 +50,15 @@ def init_db() -> None:
     if table_exists:
         cols = _table_columns(conn, "users")
 
-        # Add password_hash column if missing (kept for backwards compatibility; app uses users.password)
         if "password_hash" not in cols:
             conn.execute("ALTER TABLE users ADD COLUMN password_hash TEXT")
 
-        # Add failed_attempts column if missing
         if "failed_attempts" not in cols:
             conn.execute("ALTER TABLE users ADD COLUMN failed_attempts INTEGER NOT NULL DEFAULT 0")
 
-        # Add lock_until column if missing
         if "lock_until" not in cols:
             conn.execute("ALTER TABLE users ADD COLUMN lock_until INTEGER")
 
-        # Add created_at column if missing
-        # SQLite cannot ALTER TABLE with DEFAULT (datetime('now')), so:
-        # 1) add column nullable
-        # 2) backfill existing rows
         if "created_at" not in cols:
             conn.execute("ALTER TABLE users ADD COLUMN created_at TEXT")
             conn.execute(

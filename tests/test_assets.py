@@ -2,7 +2,6 @@ from tests.conftest import login
 
 
 def _csrf_for_form(client, path: str = "/create"):
-    # Hit a page that renders a form containing csrf_token() so the token exists in session.
     client.get(path)
     with client.session_transaction() as sess:
         return sess.get("csrf_token")
@@ -30,8 +29,7 @@ def test_non_admin_cannot_delete(client):
         follow_redirects=False,
     )
 
-    # Try delete as non-admin
-    token = _csrf_for_form(client, "/")  # dashboard for user won't create token; still OK if token already exists
+    token = _csrf_for_form(client, "/")
     if not token:
         token = _csrf_for_form(client, "/create")
 

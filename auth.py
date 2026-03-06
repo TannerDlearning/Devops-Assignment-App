@@ -15,7 +15,6 @@ def register():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
 
-        # Basic validation
         if not username or not password:
             flash("Username and password are required.", "error")
             return render_template("register.html")
@@ -28,10 +27,8 @@ def register():
             flash("Password must be at least 10 characters.", "error")
             return render_template("register.html")
 
-        # SECURITY: store a hashed password
         password_hash = generate_password_hash(password)
 
-        # SECURITY: never allow users to self-assign admin.
         role = "user"
 
         conn = db.get_connection()
@@ -45,7 +42,6 @@ def register():
             return redirect("/login")
 
         except sqlite3.IntegrityError as e:
-            # Only show "username exists" if it actually is that constraint
             if "users.username" in str(e):
                 flash("Username already exists.", "error")
             else:
@@ -76,7 +72,6 @@ def login():
             flash(invalid_msg, "error")
             return render_template("login.html")
 
-        # Brute-force lockout
         lock_until = user["lock_until"]
         if lock_until and int(lock_until) > now_unix():
             remaining = int(lock_until) - now_unix()
@@ -88,7 +83,6 @@ def login():
         ok = check_password_hash(stored_hash, password)
 
         if ok:
-            # Reset attempts on success
             conn.execute(
                 "UPDATE users SET failed_attempts = 0, lock_until = NULL WHERE id = ?",
                 (user["id"],),
@@ -102,7 +96,6 @@ def login():
             session.permanent = True
             return redirect("/")
 
-        # Failed login: increment attempts + lock if needed
         attempts = int(user["failed_attempts"] or 0) + 1
         lock_until_val = None
         if attempts >= MAX_ATTEMPTS:

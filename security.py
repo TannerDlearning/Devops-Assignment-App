@@ -4,11 +4,6 @@ from functools import wraps
 
 from flask import session, request, redirect, flash, abort
 
-
-# -----------------
-# CSRF protection
-# -----------------
-
 def generate_csrf_token() -> str:
     token = session.get("csrf_token")
     if not token:
@@ -18,21 +13,11 @@ def generate_csrf_token() -> str:
 
 
 def validate_csrf() -> None:
-    """Validate CSRF token for state-changing requests.
-
-    This is a lightweight, tangible implementation (no framework magic), which
-    is useful for coursework evidence.
-    """
     if request.method in {"POST", "PUT", "PATCH", "DELETE"}:
         sent = request.form.get("csrf_token") or request.headers.get("X-CSRF-Token")
         expected = session.get("csrf_token")
         if not expected or not sent or sent != expected:
             abort(403)
-
-
-# -----------------
-# Auth / RBAC helpers
-# -----------------
 
 def login_required(view):
     @wraps(view)
@@ -57,11 +42,6 @@ def admin_required(view):
         return view(*args, **kwargs)
 
     return wrapped
-
-
-# -----------------
-# Brute-force protection
-# -----------------
 
 MAX_ATTEMPTS = 5
 LOCK_SECONDS = 5 * 60

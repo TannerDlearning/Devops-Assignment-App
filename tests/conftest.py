@@ -12,16 +12,12 @@ def app():
     os.close(db_fd)
 
     test_app = create_app({"TESTING": True, "DATABASE": db_path, "SECRET_KEY": "test"})
-
-    # Create schema
     import sqlite3
 
     conn = sqlite3.connect(db_path)
     with open("schema.sql", "r", encoding="utf-8") as f:
         conn.executescript(f.read())
     conn.commit()
-
-    # Seed users
     from werkzeug.security import generate_password_hash
 
     conn.execute(
@@ -49,7 +45,6 @@ def client(app):
 
 
 def login(client, username: str, password: str):
-    # First GET to establish CSRF token in session
     client.get("/login")
     with client.session_transaction() as sess:
         token = sess.get("csrf_token")
