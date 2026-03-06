@@ -20,7 +20,7 @@ def register():
             return render_template("register.html")
 
         if len(username) < 3 or len(username) > 40:
-            flash("Username must be 3–40 characters.", "error")
+            flash("Username must be 3-40 characters.", "error")
             return render_template("register.html")
 
         if len(password) < 10:

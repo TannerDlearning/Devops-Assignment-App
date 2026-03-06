@@ -7,6 +7,7 @@ import db
 from werkzeug.security import generate_password_hash
 
 def main() -> None:
+    # setting up terminal command to create an admin user
     parser = argparse.ArgumentParser()
     parser.add_argument("--username", required=True)
     parser.add_argument("--password", required=True)

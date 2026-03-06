@@ -1,6 +1,3 @@
--- SQLite schema for the Secure Asset Explorer (SEA)
--- Max 4 tables requirement: we intentionally keep this to 2 tables.
-
 DROP TABLE IF EXISTS assets;
 DROP TABLE IF EXISTS users;
 
@@ -10,7 +7,7 @@ CREATE TABLE users (
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'user',
 
-    -- Brute-force protection
+    -- Brute force protection
     failed_attempts INTEGER NOT NULL DEFAULT 0,
     lock_until INTEGER,
 
