@@ -12,10 +12,6 @@ from security import generate_csrf_token, validate_csrf
 
 
 def create_app(test_config: dict | None = None) -> Flask:
-    """Create and configure the Flask application.
-
-    A factory pattern makes the app easier to test (pytest) and deploy.
-    """
 
     app = Flask(__name__)
 

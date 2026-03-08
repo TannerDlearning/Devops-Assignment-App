@@ -1,12 +1,13 @@
 import os
 import sqlite3
 import shutil
+import tempfile
 from flask import current_app
 
 
 def _default_db_path() -> str:
     if os.environ.get("VERCEL"):
-        return "/tmp/data.db"
+        return os.path.join(tempfile.gettempdir(), "data.db")
     return "data.db"
 
 
